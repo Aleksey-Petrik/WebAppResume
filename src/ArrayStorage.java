@@ -1,30 +1,52 @@
+import java.util.Arrays;
+
 /**
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10000];
+    private final Resume[] storage = new Resume[10_000];
+    private int size = 0;
 
-    void clear() {
+    public void clear() {
+        Arrays.fill(storage, null);
+        size = 0;
     }
 
-    void save(Resume r) {
+    public void save(Resume r) {
+        storage[size] = r;
+        size++;
     }
 
-    Resume get(String uuid) {
-        return null;
+    public Resume get(String uuid) {
+        int indexResume = findIndex(uuid);
+        return indexResume != -1 ? storage[indexResume] : null;
     }
 
-    void delete(String uuid) {
+    public void delete(String uuid) {
+        int indexResume = findIndex(uuid);
+        if (indexResume != -1) {
+            System.arraycopy(storage, indexResume + 1, storage, indexResume, storage.length - size);
+            size--;
+        }
     }
 
     /**
      * @return array, contains only Resumes in storage (without null)
      */
-    Resume[] getAll() {
-        return new Resume[0];
+    public Resume[] getAll() {
+        return Arrays.copyOf(storage, size);
     }
 
-    int size() {
-        return 0;
+    public int size() {
+        return size;
+    }
+
+    private int findIndex(String uuid) {
+        for (int i = 0; i < size; i++) {
+            if (storage[i].uuid.equals(uuid)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
