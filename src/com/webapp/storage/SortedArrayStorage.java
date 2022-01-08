@@ -16,12 +16,10 @@ public class SortedArrayStorage extends AbstractArrayStorage {
             System.arraycopy(storage, index, storage, index + 1, storage.length - (index + 1));
         }
         storage[index] = r;
-        size++;
     }
 
     protected void fillNullElement(int index) {
         System.arraycopy(storage, index + 1, storage, index, STORAGE_LIMIT - size);
-        size--;
     }
 
     protected int findIndex(String uuid) {
