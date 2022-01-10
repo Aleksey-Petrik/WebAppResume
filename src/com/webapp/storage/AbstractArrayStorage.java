@@ -1,11 +1,14 @@
 package com.webapp.storage;
 
+import com.webapp.exception.ExistStorageException;
+import com.webapp.exception.NotExistStorageException;
+import com.webapp.exception.StorageException;
 import com.webapp.model.Resume;
 
 import java.util.Arrays;
 
 public abstract class AbstractArrayStorage implements Storage {
-    protected static final int STORAGE_LIMIT = 10_000;
+    public static final int STORAGE_LIMIT = 10_000;
 
     protected final Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
@@ -18,10 +21,10 @@ public abstract class AbstractArrayStorage implements Storage {
                 addResume(r, indexResume);
                 size++;
             } else {
-                System.out.printf("%nResume uuid=%s exists!%n", r.getUuid());
+                throw new ExistStorageException(r.getUuid(), String.format("%nResume uuid=%s exists!%n", r.getUuid()));
             }
         } else {
-            System.out.println("The record limit has been exceeded!");
+            throw new StorageException(r.getUuid(), "The record limit has been exceeded!");
         }
     }
 
@@ -29,19 +32,18 @@ public abstract class AbstractArrayStorage implements Storage {
     public Resume get(String uuid) {
         int indexResume = findIndex(uuid);
         if (indexResume < 0) {
-            System.out.printf("%nResume uuid=%s not exists!%n", uuid);
-            return null;
+            throw new NotExistStorageException(uuid, String.format("%nResume uuid=%s not exists!%n", uuid));
         }
         return storage[indexResume];
     }
 
     @Override
-    public void update(Resume resume) {
-        int indexResume = findIndex(resume.getUuid());
+    public void update(Resume r) {
+        int indexResume = findIndex(r.getUuid());
         if (indexResume < 0) {
-            System.out.printf("%nResume uuid=%s not exists!%n", resume.getUuid());
+            throw new NotExistStorageException(r.getUuid(), String.format("%nResume uuid=%s not exists!%n", r.getUuid()));
         } else {
-            storage[indexResume] = resume;
+            storage[indexResume] = r;
         }
     }
 
@@ -49,7 +51,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public void delete(String uuid) {
         int indexResume = findIndex(uuid);
         if (indexResume < 0) {
-            System.out.printf("%nResume uuid=%s not exists!%n", uuid);
+            throw new NotExistStorageException(uuid, String.format("%nResume uuid=%s not exists!%n", uuid));
         } else {
             fillNullElement(indexResume);
             size--;
@@ -58,7 +60,7 @@ public abstract class AbstractArrayStorage implements Storage {
 
     @Override
     public void clear() {
-        Arrays.fill(storage, 0, size - 1, null);
+        Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
