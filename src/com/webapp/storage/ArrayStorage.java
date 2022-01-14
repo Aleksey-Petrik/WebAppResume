@@ -8,18 +8,18 @@ import com.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void addResume(Resume r, int index) {
+    protected void addResume(Resume r, Integer index) {
         storage[size] = r;
     }
 
     @Override
-    protected void fillNullElement(int index) {
+    protected void fillNullElement(Integer index) {
         storage[index] = storage[size - 1];
         storage[size - 1] = null;
     }
 
     @Override
-    protected int findIndex(String uuid) {
+    protected Integer findSearchKey(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;

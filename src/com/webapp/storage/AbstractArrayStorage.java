@@ -5,14 +5,20 @@ import com.webapp.model.Resume;
 
 import java.util.Arrays;
 
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     public static final int STORAGE_LIMIT = 10_000;
 
     protected final Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
+    protected abstract Integer findSearchKey(String uuid);
+
+    protected abstract void fillNullElement(Integer index);
+
+    protected abstract void addResume(Resume r, Integer index);
+
     @Override
-    protected void saveResume(Resume r, int index) {
+    protected void saveResume(Resume r, Integer index) {
         if (size != STORAGE_LIMIT) {
             addResume(r, index);
             size++;
@@ -22,17 +28,17 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume getResume(int index) {
+    protected Resume getResume(Integer index) {
         return storage[index];
     }
 
     @Override
-    protected void updateResume(Resume r, int index) {
+    protected void updateResume(Resume r, Integer index) {
         storage[index] = r;
     }
 
     @Override
-    protected void deleteResume(int index) {
+    protected void deleteResume(Integer index) {
         fillNullElement(index);
         size--;
     }
@@ -56,9 +62,9 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size = 0;
     }
 
-    protected abstract int findIndex(String uuid);
+    @Override
+    protected boolean isExist(Integer index) {
+        return index >= 0;
+    }
 
-    protected abstract void fillNullElement(int index);
-
-    protected abstract void addResume(Resume r, int index);
 }
