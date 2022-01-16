@@ -10,6 +10,8 @@ import java.util.Comparator;
  */
 public class SortedArrayStorage extends AbstractArrayStorage {
 
+    private static final Comparator<Resume> COMPARATOR_SORT_UUID = (o1, o2) -> o1.getUuid().compareTo(o2.getUuid());
+
     @Override
     protected void addResume(Resume r, Integer index) {
         index = Math.abs(index) - 1;
