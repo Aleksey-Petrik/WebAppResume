@@ -1,5 +1,6 @@
 package com.webapp.model;
 
+import java.util.EnumMap;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -12,6 +13,9 @@ public class Resume implements Comparable<Resume> {
     private final String uuid;
     private final String fullName;
 
+    EnumMap<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    EnumMap<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
+
     public Resume(String uuid, String fullName) {
         Objects.requireNonNull(uuid, "uuid not should be Null!");
         Objects.requireNonNull(fullName, "fullName not should be Null!");
@@ -19,12 +23,36 @@ public class Resume implements Comparable<Resume> {
         this.fullName = fullName;
     }
 
+    public Resume(String fullName) {
+        this(UUID.randomUUID().toString(), fullName);
+    }
+
     public Resume() {
-        this(UUID.randomUUID().toString(), "");
+        this("");
     }
 
     public String getUuid() {
         return uuid;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public EnumMap<ContactType, String> getContacts() {
+        return contacts;
+    }
+
+    public EnumMap<SectionType, AbstractSection> getSections() {
+        return sections;
+    }
+
+    public void addContact(ContactType contactType, String description) {
+        contacts.put(contactType, description);
+    }
+
+    public void addSection(SectionType sectionType, AbstractSection section) {
+        sections.put(sectionType, section);
     }
 
     @Override
