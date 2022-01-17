@@ -52,12 +52,11 @@ public class MapUuidStorage extends AbstractStorage<String> {
 
     @Override
     protected boolean isExist(String key) {
-        return key != null;
+        return storage.containsKey(key);
     }
 
     @Override
     protected String findSearchKey(String uuid) {
-        Resume resume = storage.get(uuid);
-        return resume == null ? null : uuid;
+        return uuid;
     }
 }

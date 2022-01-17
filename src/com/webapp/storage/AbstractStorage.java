@@ -51,7 +51,9 @@ public abstract class AbstractStorage<T> implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return getListResumes();
+        List<Resume> resumes = getListResumes();
+        resumes.sort(Resume::compareTo);
+        return resumes;
     }
 
     private T getExistedSearchKey(String uuid) {

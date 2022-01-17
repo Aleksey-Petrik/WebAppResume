@@ -110,7 +110,6 @@ public abstract class AbstractStorageTest {
                 RESUME_3, RESUME_4, RESUME_5);
         List<Resume> actualList = storage.getAllSorted();
         expectedList.sort(Resume::compareTo);
-        actualList.sort(Resume::compareTo);
         assertSize(5);
         Assert.assertEquals(expectedList, actualList);
     }
