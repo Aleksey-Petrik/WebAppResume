@@ -24,6 +24,11 @@ public class ListStorage extends AbstractStorage<Integer> {
     }
 
     @Override
+    protected List<Resume> getListResumes() {
+        return storage;
+    }
+
+    @Override
     protected void deleteResume(Integer index) {
         storage.remove((index).intValue());
     }
