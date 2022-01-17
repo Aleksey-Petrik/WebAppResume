@@ -20,6 +20,10 @@ public class ListSection extends AbstractSection {
 
     @Override
     public String getBlockDescriptions() {
-        return null;
+        StringBuilder builder = new StringBuilder();
+        descriptions.forEach(description -> builder.append("-")
+                .append(description)
+                .append("\n"));
+        return builder.toString();
     }
 }
