@@ -2,6 +2,7 @@ package com.webapp.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ListSection extends AbstractSection {
 
@@ -15,6 +16,7 @@ public class ListSection extends AbstractSection {
     }
 
     public void addDescription(String description) {
+        Objects.requireNonNull(description, "Description not be Null!");
         descriptions.add(description);
     }
 

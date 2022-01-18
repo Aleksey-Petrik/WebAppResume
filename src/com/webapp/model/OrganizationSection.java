@@ -2,6 +2,7 @@ package com.webapp.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class OrganizationSection extends AbstractSection {
 
@@ -14,8 +15,13 @@ public class OrganizationSection extends AbstractSection {
         return organizations;
     }
 
-    public void addOrganization(String title, String url, List<Organization.PeriodWorks> periods) {
-        organizations.add(new Organization(title, url, periods));
+    public void addOrganization(String title, String url) {
+        Objects.requireNonNull(title, "Title not be Null!");
+        organizations.add(new Organization(title, url));
+    }
+
+    public void addOrganization(Organization organization) {
+        organizations.add(organization);
     }
 
     @Override
