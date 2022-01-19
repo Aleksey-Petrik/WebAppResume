@@ -10,6 +10,15 @@ import static com.webapp.util.DateUtil._NOW_;
 
 public class ResumeTestData {
 
+    public static Resume fillResume(String uuid, String fullName) {
+        Resume resume = new Resume(uuid, fullName);
+        addContacts(resume);
+        addObjectivePersonal(resume);
+        addExperienceEducation(resume);
+        addAchievementQualifications(resume);
+        return resume;
+    }
+
     public static void addContacts(Resume resume) {
         resume.addContact(ContactType.PHONE_NUMBER, "+7(921)855-0482");
         resume.addContact(ContactType.SKYPE, "grigory.kislin");
@@ -187,11 +196,7 @@ public class ResumeTestData {
 
     public static void main(String[] args) {
 
-        Resume resume = new Resume("Grigory Kislin");
-        addContacts(resume);
-        addObjectivePersonal(resume);
-        addAchievementQualifications(resume);
-        addExperienceEducation(resume);
+        Resume resume = fillResume("", "Grigory Kislin");
 
         EnumMap<ContactType, String> contacts = resume.getContacts();
         EnumMap<SectionType, AbstractSection> sections = resume.getSections();
