@@ -42,10 +42,10 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     protected void saveResume(Resume r, File file) {
         try {
             directory.createNewFile();
-            doWrite(r, file);
         } catch (IOException e) {
             throw new StorageException(r.getUuid(), "Error create file resume", e);
         }
+        updateResume(r, file);
     }
 
     @Override
@@ -53,7 +53,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         try {
             doWrite(r, file);
         } catch (IOException e) {
-            throw new StorageException(r.getUuid(), "Error create file resume", e);
+            throw new StorageException(file.getAbsolutePath(), "Error update file resume!", e);
         }
     }
 
@@ -64,8 +64,13 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected List<Resume> getListResumes() {
-        return Arrays.stream(Objects.requireNonNull(directory.listFiles()))
-                .map(this::doRead).toList();
+        File[] files = directory.listFiles();
+        if (files == null) {
+            throw new StorageException("Clear error read storage folder!");
+        }
+        return Arrays.stream(files)
+                .map(this::doRead)
+                .toList();
     }
 
     @Override
@@ -77,16 +82,31 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected Resume[] getArrayResumes() {
-        return (Resume[]) Arrays.stream(Objects.requireNonNull(directory.listFiles())).map(this::doRead).toArray();
+        File[] files = directory.listFiles();
+        if (files == null) {
+            throw new StorageException("Clear error read storage folder!");
+        }
+        return (Resume[]) Arrays.stream(files).
+                map(this::doRead)
+                .toArray();
     }
 
     @Override
     public void clear() {
-        Arrays.asList(Objects.requireNonNull(directory.listFiles())).forEach(this::deleteResume);
+        File[] files = directory.listFiles();
+        if (files == null) {
+            throw new StorageException("Clear error read storage folder!");
+        }
+        Arrays.asList(files)
+                .forEach(this::deleteResume);
     }
 
     @Override
     public int size() {
-        return Objects.requireNonNull(directory.listFiles()).length;
+        String[] files = directory.list();
+        if (files == null) {
+            throw new StorageException("Size error read storage folder!");
+        }
+        return files.length;
     }
 }
