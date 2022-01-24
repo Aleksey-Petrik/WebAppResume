@@ -1,6 +1,8 @@
 package com.webapp.model;
 
-public abstract class AbstractSection implements Section {
+import java.io.Serializable;
+
+public abstract class AbstractSection implements Section, Serializable {
     /*
      * Common class for sections
      * */

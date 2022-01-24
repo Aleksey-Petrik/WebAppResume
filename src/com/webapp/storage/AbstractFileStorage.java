@@ -4,6 +4,7 @@ import com.webapp.exception.StorageException;
 import com.webapp.model.Resume;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -71,9 +72,9 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         if (files == null) {
             throw new StorageException("Get files error read storage folder!");
         }
-        return Arrays.stream(files)
+        return new ArrayList<>(Arrays.stream(files)
                 .map(this::getResume)
-                .toList();
+                .toList());
     }
 
     @Override
@@ -87,11 +88,10 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     protected Resume[] getArrayResumes() {
         File[] files = directory.listFiles();
         if (files == null) {
-            throw new StorageException("Clear error read storage folder!");
+            throw new StorageException("Get files error read storage folder!");
         }
-        return (Resume[]) Arrays.stream(files).
-                map(this::getResume)
-                .toArray();
+        return Arrays.stream(files).
+                map(this::getResume).toList().toArray(new Resume[0]);
     }
 
     @Override
