@@ -3,8 +3,7 @@ package com.webapp.storage;
 import com.webapp.exception.StorageException;
 import com.webapp.model.Resume;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -13,9 +12,9 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     protected File directory;
 
-    protected abstract void doWrite(Resume r, File file) throws IOException;
+    protected abstract void doWrite(Resume r, OutputStream file) throws IOException;
 
-    protected abstract Resume doRead(File file);// throws IOException;
+    protected abstract Resume doRead(InputStream file) throws IOException;
 
     public AbstractFileStorage(File directory) {
         Objects.requireNonNull(directory, " Directory not be Null!");
@@ -51,7 +50,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected void updateResume(Resume r, File file) {
         try {
-            doWrite(r, file);
+            doWrite(r, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException(file.getAbsolutePath(), "Error update file resume!", e);
         }
@@ -59,17 +58,21 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected Resume getResume(File file) {
-        return doRead(file);
+        try {
+            return doRead(new BufferedInputStream(new FileInputStream(file)));
+        } catch (IOException e) {
+            throw new StorageException(file.getAbsolutePath(), "Error read file resume!", e);
+        }
     }
 
     @Override
     protected List<Resume> getListResumes() {
         File[] files = directory.listFiles();
         if (files == null) {
-            throw new StorageException("Clear error read storage folder!");
+            throw new StorageException("Get files error read storage folder!");
         }
         return Arrays.stream(files)
-                .map(this::doRead)
+                .map(this::getResume)
                 .toList();
     }
 
@@ -87,7 +90,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
             throw new StorageException("Clear error read storage folder!");
         }
         return (Resume[]) Arrays.stream(files).
-                map(this::doRead)
+                map(this::getResume)
                 .toArray();
     }
 
