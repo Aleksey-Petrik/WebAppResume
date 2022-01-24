@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class ListSection extends AbstractSection {
+    private static final long serialVersionUID = 1L;
 
     private final List<String> descriptions = new ArrayList<>();
 
@@ -27,5 +28,18 @@ public class ListSection extends AbstractSection {
                 .append(description)
                 .append("\n"));
         return builder.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ListSection that = (ListSection) o;
+        return Objects.equals(descriptions, that.descriptions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(descriptions);
     }
 }

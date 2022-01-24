@@ -1,11 +1,14 @@
 package com.webapp.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Organization {
+public class Organization implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String title;
     private String url;
     private List<PeriodWorks> periods = new ArrayList<>();
@@ -47,7 +50,7 @@ public class Organization {
         periods.add(new PeriodWorks(startDate, endDate, position, description));
     }
 
-    public static class PeriodWorks {
+    public static class PeriodWorks implements Serializable {
         private String position;
         private String description;
         private LocalDate startDate;
@@ -91,6 +94,31 @@ public class Organization {
         public void setEndDate(LocalDate endDate) {
             this.endDate = endDate;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            PeriodWorks that = (PeriodWorks) o;
+            return Objects.equals(position, that.position) && Objects.equals(description, that.description) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(position, description, startDate, endDate);
+        }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Organization that = (Organization) o;
+        return Objects.equals(title, that.title) && Objects.equals(url, that.url) && Objects.equals(periods, that.periods);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, url, periods);
+    }
 }
