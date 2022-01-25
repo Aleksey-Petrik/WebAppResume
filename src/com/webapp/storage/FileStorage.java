@@ -2,6 +2,7 @@ package com.webapp.storage;
 
 import com.webapp.exception.StorageException;
 import com.webapp.model.Resume;
+import com.webapp.storage.serializable.SerializableStream;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -9,15 +10,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File> {
+public class FileStorage extends AbstractStorage<File> {
 
     protected File directory;
+    private final SerializableStream serializableStream;
 
-    protected abstract void doWrite(Resume r, OutputStream file) throws IOException;
-
-    protected abstract Resume doRead(InputStream file) throws IOException;
-
-    public AbstractFileStorage(File directory) {
+    public FileStorage(File directory, SerializableStream serializableStream) {
         Objects.requireNonNull(directory, " Directory not be Null!");
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " Directory is not be file!");
@@ -26,6 +24,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " Error read/write!");
         }
         this.directory = directory;
+        this.serializableStream = serializableStream;
     }
 
     @Override
@@ -51,7 +50,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected void updateResume(Resume r, File file) {
         try {
-            doWrite(r, new BufferedOutputStream(new FileOutputStream(file)));
+            serializableStream.doWrite(r, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException(file.getAbsolutePath(), "Error update file resume!", e);
         }
@@ -60,7 +59,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected Resume getResume(File file) {
         try {
-            return doRead(new BufferedInputStream(new FileInputStream(file)));
+            return serializableStream.doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             throw new StorageException(file.getAbsolutePath(), "Error read file resume!", e);
         }
