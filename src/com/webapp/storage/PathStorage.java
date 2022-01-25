@@ -4,13 +4,16 @@ import com.webapp.exception.StorageException;
 import com.webapp.model.Resume;
 import com.webapp.storage.serializable.SerializableStream;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
 
@@ -28,12 +31,13 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected boolean isExist(Path file) {
+        /*Files.isRegularFile(file);*/
         return Files.exists(file);
     }
 
     @Override
     protected Path findSearchKey(String uuid) {
-        return Paths.get(directory + "\\" + uuid);
+        return directory.resolve(uuid);
     }
 
     @Override
@@ -41,7 +45,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             Files.createFile(file);
         } catch (IOException e) {
-            throw new StorageException(r.getUuid(), "Error create file resume", e);
+            throw new StorageException(file.getFileName().toString(), "Error create file resume in storage - ".concat(file.toString()), e);
         }
         updateResume(r, file);
     }
@@ -49,16 +53,16 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected void updateResume(Resume r, Path file) {
         try {
-            serializableStream.doWrite(r, new BufferedOutputStream(new FileOutputStream(file.toFile())));
+            serializableStream.doWrite(r, new BufferedOutputStream(Files.newOutputStream(file)));
         } catch (IOException e) {
-            throw new StorageException(file.toString(), "Error update file resume!", e);
+            throw new StorageException(file.getFileName().toString(), "Error update file resume in storage - ".concat(file.toString()), e);
         }
     }
 
     @Override
     protected Resume getResume(Path file) {
         try {
-            return serializableStream.doRead(new BufferedInputStream(new FileInputStream(file.toFile())));
+            return serializableStream.doRead(new BufferedInputStream(Files.newInputStream(file)));
         } catch (IOException e) {
             throw new StorageException(file.toString(), "Error read file resume!", e);
         }
@@ -66,11 +70,9 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected List<Resume> getListResumes() {
-        try {
-            return new ArrayList<>(Files.list(directory).map(this::getResume).toList());
-        } catch (IOException e) {
-            throw new StorageException("Get files error read storage folder!");
-        }
+        return getFileList()
+                .map(this::getResume)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -78,34 +80,32 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             Files.delete(file);
         } catch (IOException e) {
-            throw new StorageException(file.toString(), "Error file delete IO");
+            throw new StorageException(file.toString(), "Error file delete IO", e);
         }
     }
 
     @Override
     protected Resume[] getArrayResumes() {
-        try {
-            return Files.list(directory).map(this::getResume).toList().toArray(new Resume[0]);
-        } catch (IOException e) {
-            throw new StorageException("Get files error read storage folder!");
-        }
+        return getFileList().map(this::getResume)
+                .toList()
+                .toArray(new Resume[0]);
     }
 
     @Override
     public void clear() {
-        try {
-            Files.list(directory).forEach(this::deleteResume);
-        } catch (IOException e) {
-            throw new StorageException("Clear error read storage folder!");
-        }
+        getFileList().forEach(this::deleteResume);
     }
 
     @Override
     public int size() {
+        return (int) getFileList().count();
+    }
+
+    private Stream<Path> getFileList() {
         try {
-            return (int) Files.list(directory).count();
+            return Files.list(directory);
         } catch (IOException e) {
-            throw new StorageException("Size error read storage folder!");
+            throw new StorageException(null, "Error read storage folder! " + directory.toString(), e);
         }
     }
 }
