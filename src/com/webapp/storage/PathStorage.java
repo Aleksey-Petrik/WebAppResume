@@ -2,6 +2,7 @@ package com.webapp.storage;
 
 import com.webapp.exception.StorageException;
 import com.webapp.model.Resume;
+import com.webapp.storage.serializable.SerializableStream;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -11,20 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractPathStorage extends AbstractStorage<Path> {
+public class PathStorage extends AbstractStorage<Path> {
 
     protected Path directory;
+    private final SerializableStream serializableStream;
 
-    protected abstract void doWrite(Resume r, OutputStream file) throws IOException;
-
-    protected abstract Resume doRead(InputStream file) throws IOException;
-
-    public AbstractPathStorage(String dir) {
+    public PathStorage(String dir, SerializableStream serializableStream) {
         directory = Paths.get(dir);
         Objects.requireNonNull(directory, " Directory not be Null!");
         if (!Files.isWritable(directory) || !Files.isReadable(directory)) {
             throw new IllegalArgumentException(dir + " Error read/write!");
         }
+        this.serializableStream = serializableStream;
     }
 
     @Override
@@ -50,7 +49,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     @Override
     protected void updateResume(Resume r, Path file) {
         try {
-            doWrite(r, new BufferedOutputStream(new FileOutputStream(file.toFile())));
+            serializableStream.doWrite(r, new BufferedOutputStream(new FileOutputStream(file.toFile())));
         } catch (IOException e) {
             throw new StorageException(file.toString(), "Error update file resume!", e);
         }
@@ -59,7 +58,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume getResume(Path file) {
         try {
-            return doRead(new BufferedInputStream(new FileInputStream(file.toFile())));
+            return serializableStream.doRead(new BufferedInputStream(new FileInputStream(file.toFile())));
         } catch (IOException e) {
             throw new StorageException(file.toString(), "Error read file resume!", e);
         }
