@@ -208,15 +208,23 @@ public class ResumeTestData {
             SectionType type = entry.getKey();
             System.out.println(type.getTitle());
             switch (type) {
-                case PERSONAL, OBJECTIVE -> System.out.println(((TextSection) entry.getValue()).getDescription());
-                case ACHIEVEMENT, QUALIFICATIONS -> ((ListSection) entry.getValue()).getDescriptions().forEach(description -> System.out.println("-" + description));
-                case EXPERIENCE, EDUCATION -> ((OrganizationSection) entry.getValue()).getOrganizations().forEach(organization -> {
-                    System.out.println(organization.getUrl() + " " + organization.getTitle());
-                    organization.getPeriods().forEach(period -> {
-                        System.out.println(DateUtil.format(period.getStartDate()) + "-" + DateUtil.format(period.getEndDate()) + " " + period.getPosition());
-                        System.out.println(period.getDescription());
+                case PERSONAL:
+                case OBJECTIVE:
+                    System.out.println(((TextSection) entry.getValue()).getDescription());
+                    break;
+                case ACHIEVEMENT:
+                case QUALIFICATIONS:
+                    ((ListSection) entry.getValue()).getDescriptions().forEach(description -> System.out.println("-" + description));
+                    break;
+                case EXPERIENCE:
+                case EDUCATION:
+                    ((OrganizationSection) entry.getValue()).getOrganizations().forEach(organization -> {
+                        System.out.println(organization.getUrl() + " " + organization.getTitle());
+                        organization.getPeriods().forEach(period -> {
+                            System.out.println(DateUtil.format(period.getStartDate()) + "-" + DateUtil.format(period.getEndDate()) + " " + period.getPosition());
+                            System.out.println(period.getDescription());
+                        });
                     });
-                });
             }
         }
     }

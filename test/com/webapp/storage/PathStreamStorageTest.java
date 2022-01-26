@@ -2,9 +2,9 @@ package com.webapp.storage;
 
 import com.webapp.storage.serializable.ObjectStreamStorageSerializer;
 
-public class PathStreamPathStorageTest extends AbstractStorageTest {
+public class PathStreamStorageTest extends AbstractStorageTest {
 
-    public PathStreamPathStorageTest() {
+    public PathStreamStorageTest() {
         super(new PathStorage(STORAGE_DIR.getAbsolutePath(), new ObjectStreamStorageSerializer()));
     }
 }

@@ -1,17 +1,26 @@
 package com.webapp.model;
 
+import com.webapp.util.LocalDateAdapter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String title;
     private String url;
     private List<PeriodWorks> periods = new ArrayList<>();
+
+    public Organization() {
+    }
 
     public Organization(String title, String url) {
         this.title = title;
@@ -50,11 +59,18 @@ public class Organization implements Serializable {
         periods.add(new PeriodWorks(startDate, endDate, position, description));
     }
 
+    @XmlAccessorType(XmlAccessType.FIELD)
     public static class PeriodWorks implements Serializable {
         private String position;
         private String description;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate startDate;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate endDate;
+
+        public PeriodWorks() {
+            this(null, null, "", "");
+        }
 
         public PeriodWorks(LocalDate startDate, LocalDate endDate, String position, String description) {
             this.position = position;
