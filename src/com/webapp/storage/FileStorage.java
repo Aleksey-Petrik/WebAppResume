@@ -5,10 +5,10 @@ import com.webapp.model.Resume;
 import com.webapp.storage.serializable.SerializableStream;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class FileStorage extends AbstractStorage<File> {
 
@@ -71,9 +71,9 @@ public class FileStorage extends AbstractStorage<File> {
         if (files == null) {
             throw new StorageException("Get files error read storage folder!");
         }
-        return new ArrayList<>(Arrays.stream(files)
+        return Arrays.stream(files)
                 .map(this::getResume)
-                .toList());
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -89,8 +89,9 @@ public class FileStorage extends AbstractStorage<File> {
         if (files == null) {
             throw new StorageException("Get files error read storage folder!");
         }
+        //TODO
         return Arrays.stream(files).
-                map(this::getResume).toList().toArray(new Resume[0]);
+                map(this::getResume).collect(Collectors.toList()).toArray(new Resume[0]);
     }
 
     @Override

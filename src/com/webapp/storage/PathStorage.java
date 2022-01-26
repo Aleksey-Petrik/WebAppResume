@@ -86,8 +86,9 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected Resume[] getArrayResumes() {
+        //TODO
         return getFileList().map(this::getResume)
-                .toList()
+                .collect(Collectors.toList())
                 .toArray(new Resume[0]);
     }
 
