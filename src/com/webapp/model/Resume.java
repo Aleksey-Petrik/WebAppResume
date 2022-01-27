@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.EnumMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -20,8 +21,8 @@ public class Resume implements Comparable<Resume>, Serializable {
     private String uuid;
     private String fullName;
 
-    private EnumMap<ContactType, String> contacts = new EnumMap<>(ContactType.class);
-    private EnumMap<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
+    private Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    private Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
     public Resume(String uuid, String fullName) {
         Objects.requireNonNull(uuid, "uuid not should be Null!");
@@ -54,11 +55,11 @@ public class Resume implements Comparable<Resume>, Serializable {
         this.sections = sections;
     }
 
-    public EnumMap<ContactType, String> getContacts() {
+    public Map<ContactType, String> getContacts() {
         return contacts;
     }
 
-    public EnumMap<SectionType, AbstractSection> getSections() {
+    public Map<SectionType, AbstractSection> getSections() {
         return sections;
     }
 
