@@ -3,7 +3,6 @@ package com.webapp;
 import com.webapp.model.*;
 import com.webapp.util.DateUtil;
 
-import java.util.EnumMap;
 import java.util.Map;
 
 import static com.webapp.util.DateUtil._NOW_;
@@ -198,8 +197,8 @@ public class ResumeTestData {
 
         Resume resume = fillResume("", "Grigory Kislin");
 
-        EnumMap<ContactType, String> contacts = resume.getContacts();
-        EnumMap<SectionType, AbstractSection> sections = resume.getSections();
+        Map<ContactType, String> contacts = resume.getContacts();
+        Map<SectionType, AbstractSection> sections = resume.getSections();
 
         contacts.forEach((k, v) -> System.out.println(k.getTitle() + " " + v));
         //sections.forEach((k, v) -> System.out.println(k.getTitle() + " \n" + v.getBlockDescriptions()));
