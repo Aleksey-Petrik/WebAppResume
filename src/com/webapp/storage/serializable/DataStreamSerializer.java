@@ -28,12 +28,12 @@ public class DataStreamSerializer implements SerializableStream {
     public void doWrite(Resume resume, OutputStream os) throws IOException {
         try (DataOutputStream writer = new DataOutputStream(os)) {
             writer.writeUTF(resume.getUuid());
-            writer.writeUTF(resume.getUuid());
+            writer.writeUTF(resume.getFullName());
             Map<ContactType, String> contacts = resume.getContacts();
             writer.writeInt(contacts.size());
             contacts.forEach((k, v) -> {
                 try {
-                    writer.writeUTF(k.getTitle());
+                    writer.writeUTF(k.name());
                     writer.writeUTF(v);
                 } catch (IOException e) {
                     e.printStackTrace();
