@@ -12,7 +12,9 @@ import org.junit.runners.Suite;
         MapResumeStorageTest.class,
         FileStreamStorageTest.class,
         PathStreamStorageTest.class,
-        XmlStreamStorageTest.class
+        XmlPathStreamStorageTest.class,
+        JsonPathStreamStorageTest.class,
+        DataPathStreamStorageTest.class
 })
 public class AllStorageTest {
 }
