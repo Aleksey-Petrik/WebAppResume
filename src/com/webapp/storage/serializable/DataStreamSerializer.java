@@ -11,49 +11,39 @@ public class DataStreamSerializer implements SerializableStream {
 
     @Override
     public Resume doRead(InputStream is) throws IOException {
-        try (DataInputStream reader = new DataInputStream(is)) {
-            String uuid = reader.readUTF();
-            String fullName = reader.readUTF();
+        try (DataInputStream dis = new DataInputStream(is)) {
+            String uuid = dis.readUTF();
+            String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
-            int size = reader.readInt();
-            for (int i = 0; i < size; i++) {
-                ContactType contactType = ContactType.valueOf(reader.readUTF());
-                String contact = reader.readUTF();
-                resume.addContact(contactType, contact);
-            }
-
-            size = reader.readInt();
-            for (int i = 0; i < size; i++) {
-                SectionType sectionType = SectionType.valueOf(reader.readUTF());
+            //Read contacts
+            reader(dis, () -> resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+            //Read sections
+            reader(dis, () -> {
+                SectionType sectionType = SectionType.valueOf(dis.readUTF());
                 AbstractSection section = null;
                 switch (sectionType) {
                     case OBJECTIVE:
                     case PERSONAL:
-                        section = new TextSection(reader.readUTF());
+                        section = new TextSection(dis.readUTF());
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        int sizeDescriptions = reader.readInt();
-                        section = new ListSection();
-                        for (int j = 0; j < sizeDescriptions; j++) {
-                            ((ListSection) section).addDescription(reader.readUTF());
-                        }
+                        ListSection listSection = new ListSection();
+                        reader(dis, () -> listSection.addDescription(dis.readUTF()));
+                        section = listSection;
                         break;
                     case EDUCATION:
                     case EXPERIENCE:
-                        section = new OrganizationSection();
-                        int countOrganizations = reader.readInt();
-                        for (int j = 0; j < countOrganizations; j++) {
-                            Organization organization = new Organization(reader.readUTF(), reader.readUTF());
-                            int sizePeriods = reader.readInt();
-                            for (int k = 0; k < sizePeriods; k++) {
-                                organization.addPeriod(DateUtil.parse(reader.readUTF()), DateUtil.parse(reader.readUTF()), reader.readUTF(), reader.readUTF());
-                            }
-                            ((OrganizationSection) section).addOrganization(organization);
-                        }
+                        OrganizationSection organizationSection = new OrganizationSection();
+                        reader(dis, () -> {
+                            Organization organization = new Organization(dis.readUTF(), dis.readUTF());
+                            reader(dis, () -> organization.addPeriod(DateUtil.parse(dis.readUTF()), DateUtil.parse(dis.readUTF()), dis.readUTF(), dis.readUTF()));
+                            organizationSection.addOrganization(organization);
+                        });
+                        section = organizationSection;
                 }
                 resume.addSection(sectionType, section);
-            }
+            });
             return resume;
         }
     }
@@ -117,6 +107,18 @@ public class DataStreamSerializer implements SerializableStream {
                     e.printStackTrace();
                 }
             });
+        }
+    }
+
+    @FunctionalInterface
+    private interface Readable {
+        void reader() throws IOException;
+    }
+
+    private void reader(DataInputStream dis, Readable reader) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            reader.reader();
         }
     }
 }
