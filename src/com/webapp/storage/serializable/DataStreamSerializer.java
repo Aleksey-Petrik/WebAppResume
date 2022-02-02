@@ -1,6 +1,7 @@
 package com.webapp.storage.serializable;
 
 import com.webapp.model.*;
+import com.webapp.util.DateUtil;
 
 import java.io.*;
 import java.util.List;
@@ -38,6 +39,18 @@ public class DataStreamSerializer implements SerializableStream {
                             ((ListSection) section).addDescription(reader.readUTF());
                         }
                         break;
+                    case EDUCATION:
+                    case EXPERIENCE:
+                        section = new OrganizationSection();
+                        int countOrganizations = reader.readInt();
+                        for (int j = 0; j < countOrganizations; j++) {
+                            Organization organization = new Organization(reader.readUTF(), reader.readUTF());
+                            int sizePeriods = reader.readInt();
+                            for (int k = 0; k < sizePeriods; k++) {
+                                organization.addPeriod(DateUtil.parse(reader.readUTF()), DateUtil.parse(reader.readUTF()), reader.readUTF(), reader.readUTF());
+                            }
+                            ((OrganizationSection) section).addOrganization(organization);
+                        }
                 }
                 resume.addSection(sectionType, section);
             }
@@ -85,7 +98,20 @@ public class DataStreamSerializer implements SerializableStream {
                             break;
                         case EDUCATION:
                         case EXPERIENCE:
-                            //TODO realization
+                            List<Organization> organizations = ((OrganizationSection) v).getOrganizations();
+                            writer.writeInt(organizations.size());
+                            for (Organization organization : organizations) {
+                                writer.writeUTF(organization.getTitle());
+                                writer.writeUTF(organization.getUrl());
+                                List<Organization.PeriodWorks> periodWorks = organization.getPeriods();
+                                writer.writeInt(periodWorks.size());
+                                for (Organization.PeriodWorks periodWork : periodWorks) {
+                                    writer.writeUTF(DateUtil.format(periodWork.getStartDate()));
+                                    writer.writeUTF(DateUtil.format(periodWork.getEndDate()));
+                                    writer.writeUTF(periodWork.getPosition());
+                                    writer.writeUTF(periodWork.getDescription());
+                                }
+                            }
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
