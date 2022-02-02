@@ -13,7 +13,7 @@ public class ResumeTestData {
         Resume resume = new Resume(uuid, fullName);
         addContacts(resume);
         addObjectivePersonal(resume);
-        //addExperienceEducation(resume);
+        addExperienceEducation(resume);
         addAchievementQualifications(resume);
         return resume;
     }

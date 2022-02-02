@@ -17,4 +17,11 @@ public class DateUtil {
         }
         return LocalDate.now().compareTo(date) > 0 ? date.format(DateTimeFormatter.ofPattern("MM/yyyy", Locale.ENGLISH)) : "Сейчас";
     }
+
+    public static LocalDate parse(String date) {
+        if ("Сейчас".equals(date) || date.isEmpty()) {
+            return _NOW_;
+        }
+        return LocalDate.parse("01/" + date, DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.ENGLISH));
+    }
 }
