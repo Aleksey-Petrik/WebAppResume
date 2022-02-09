@@ -19,4 +19,8 @@ public class StorageException extends RuntimeException {
         this.uuid = uuid;
         this.message = message;
     }
+
+    public StorageException(String message, Exception e) {
+        this(null, message, e);
+    }
 }
