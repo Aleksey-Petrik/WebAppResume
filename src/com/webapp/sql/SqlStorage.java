@@ -51,12 +51,6 @@ public class SqlStorage implements Storage {
             }
             return null;
         });
-/*        sqlHelper.sqlExecute("INSERT INTO resume (uuid, full_name) VALUES (?, ?)", ps -> {
-            ps.setString(1, resume.getUuid());
-            ps.setString(2, resume.getFullName());
-            ps.execute();
-            return null;
-        });*/
     }
 
     @Override
@@ -114,8 +108,21 @@ public class SqlStorage implements Storage {
         return sqlHelper.sqlExecute("SELECT * FROM resume LEFT JOIN contact ON uuid = resume_uuid ORDER BY full_name, uuid", ps -> {
             ResultSet rs = ps.executeQuery();
             List<Resume> resumes = new ArrayList<>();
+            Resume resume = null;
+            String uuidForEquals = "";
             while (rs.next()) {
-                resumes.add(new Resume(rs.getString("uuid"), rs.getString("full_name")));
+                String uuid = rs.getString("uuid");
+                String fullName = rs.getString("full_name");
+                if (!uuidForEquals.equals(uuid)) {
+                    uuidForEquals = uuid;
+                    resume = new Resume(uuid, fullName);
+                    resumes.add(resume);
+                }
+                String value = rs.getString("value");
+                if (value != null) {
+                    ContactType type = ContactType.valueOf(rs.getString("type"));
+                    resume.addContact(type, value);
+                }
             }
             return resumes;
         });
