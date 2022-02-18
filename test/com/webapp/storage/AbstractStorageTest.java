@@ -4,6 +4,7 @@ import com.webapp.Config;
 import com.webapp.ResumeTestData;
 import com.webapp.exception.ExistStorageException;
 import com.webapp.exception.NotExistStorageException;
+import com.webapp.model.ContactType;
 import com.webapp.model.Resume;
 import org.junit.Assert;
 import org.junit.Before;
@@ -24,12 +25,12 @@ public abstract class AbstractStorageTest {
     protected static final String UUID_5 = "uuid5";
     protected static final String UUID_6 = "uuid6";
 
-    protected static final Resume RESUME_1 = ResumeTestData.fillResume(UUID_1, "Tobias Blair");
-    protected static final Resume RESUME_2 = ResumeTestData.fillResume(UUID_2, "Christopher Johnston");
-    protected static final Resume RESUME_3 = ResumeTestData.fillResume(UUID_3, "Dorthy Daniel");
-    protected static final Resume RESUME_4 = ResumeTestData.fillResume(UUID_4, "Alexandrina Ray");
-    protected static final Resume RESUME_5 = ResumeTestData.fillResume(UUID_5, "Elijah Reynolds");
-    protected static final Resume RESUME_6 = ResumeTestData.fillResume(UUID_6, "Dorthy Daniel");
+    protected static Resume RESUME_1;
+    protected static Resume RESUME_2;
+    protected static Resume RESUME_3;
+    protected static Resume RESUME_4;
+    protected static Resume RESUME_5;
+    protected static Resume RESUME_6;
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -38,6 +39,14 @@ public abstract class AbstractStorageTest {
     @Before
     public void setUp() {
         storage.clear();
+
+        RESUME_1 = ResumeTestData.fillResume(UUID_1, "Tobias Blair");
+        RESUME_2 = ResumeTestData.fillResume(UUID_2, "Christopher Johnston");
+        RESUME_3 = ResumeTestData.fillResume(UUID_3, "Dorthy Daniel");
+        RESUME_4 = ResumeTestData.fillResume(UUID_4, "Alexandrina Ray");
+        RESUME_5 = ResumeTestData.fillResume(UUID_5, "Elijah Reynolds");
+        RESUME_6 = ResumeTestData.fillResume(UUID_6, "Dorthy Daniel");
+
         storage.save(RESUME_1);
         storage.save(RESUME_2);
         storage.save(RESUME_3);
@@ -69,6 +78,10 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() {
+        RESUME_1.setFullName("Alex Petrov");
+        RESUME_1.getContacts().put(ContactType.PHONE_NUMBER, "+79886667799");
+        RESUME_1.getContacts().put(ContactType.SKYPE, "grigory.kislin70");
+        storage.update(RESUME_1);
         Assert.assertEquals(RESUME_1, storage.get(UUID_1));
     }
 
