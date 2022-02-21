@@ -3,6 +3,7 @@ package com.webapp.model;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,13 +16,17 @@ public class ListSection extends AbstractSection {
     public ListSection() {
     }
 
+    public ListSection(String... descriptions) {
+        addDescription(descriptions);
+    }
+
     public List<String> getDescriptions() {
         return descriptions;
     }
 
-    public void addDescription(String description) {
-        Objects.requireNonNull(description, "Description not be Null!");
-        descriptions.add(description);
+    public void addDescription(String... descriptions) {
+        Objects.requireNonNull(descriptions, "Description not be Null!");
+        this.descriptions.addAll(Arrays.asList(descriptions));
     }
 
     @Override
