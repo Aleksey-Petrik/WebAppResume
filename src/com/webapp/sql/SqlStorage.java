@@ -14,6 +14,12 @@ public class SqlStorage implements Storage {
     private final SqlHelper sqlHelper;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
+        //Инициализация драйвера Базы Данных
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException("No driver found for PostgreSQL database", e);
+        }
         /*
         this.connectionFactory = new ConnectionFactory() {
             @Override
@@ -22,7 +28,7 @@ public class SqlStorage implements Storage {
             }
         };
         */
-        this.sqlHelper = new SqlHelper(() -> DriverManager.getConnection(dbUrl, dbUser, dbPassword));
+        sqlHelper = new SqlHelper(() -> DriverManager.getConnection(dbUrl, dbUser, dbPassword));
     }
 
     @Override
