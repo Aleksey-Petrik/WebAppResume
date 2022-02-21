@@ -1,7 +1,8 @@
-package com.webapp.sql;
+package com.webapp.storage;
 
 import com.webapp.exception.NotExistStorageException;
 import com.webapp.model.*;
+import com.webapp.sql.SqlHelper;
 import com.webapp.storage.Storage;
 
 import java.sql.*;
