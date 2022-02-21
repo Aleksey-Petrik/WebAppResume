@@ -12,9 +12,9 @@ public class ResumeTestData {
     public static Resume fillResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
         addContacts(resume);
-/*        addObjectivePersonal(resume);
-        addExperienceEducation(resume);
-        addAchievementQualifications(resume);*/
+        addObjectivePersonal(resume);
+        //addExperienceEducation(resume);
+        addAchievementQualifications(resume);
         return resume;
     }
 
