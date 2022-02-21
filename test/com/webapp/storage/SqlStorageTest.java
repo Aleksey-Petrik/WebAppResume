@@ -1,6 +1,6 @@
 package com.webapp.storage;
 
-import com.webapp.Config;
+import com.webapp.util.Config;
 
 public class SqlStorageTest extends AbstractStorageTest {
 

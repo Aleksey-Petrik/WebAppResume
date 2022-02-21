@@ -1,6 +1,6 @@
 package com.webapp.web;
 
-import com.webapp.Config;
+import com.webapp.util.Config;
 import com.webapp.model.Resume;
 import com.webapp.storage.Storage;
 

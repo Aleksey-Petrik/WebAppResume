@@ -1,6 +1,6 @@
-package com.webapp;
+package com.webapp.util;
 
-import com.webapp.sql.SqlStorage;
+import com.webapp.storage.SqlStorage;
 import com.webapp.storage.Storage;
 
 import java.io.File;
