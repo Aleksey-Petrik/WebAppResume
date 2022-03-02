@@ -1,7 +1,6 @@
-<%@ page import="com.webapp.model.Resume" %>
-<%@ page import="java.util.List" %>
 <%@ page import="com.webapp.model.ContactType" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -9,26 +8,25 @@
     <title>Title</title>
 </head>
 <body>
-<section>
-    <table border=1px cellpadding="8" cellspacing="0">
-        <tr>
-            <th>Имя</th>
-            <th>Email</th>
-            <th colspan="2"></th>
-        </tr>
-        <%
-            for (Resume resume : (List<Resume>) request.getAttribute("resumes")) {
-        %>
-        <tr>
-            <td><a href="resume?uuid=<%=resume.getUuid()%>"><%=resume.getFullName()%></a></td>
-            <td><%=resume.getContact(ContactType.EMAIL)%></td>
-            <td><a href="resume?uuid=<%=resume.getUuid()%>&action=update">Update</a></td>
-            <td><a href="resume?uuid=<%=resume.getUuid()%>&action=delete">Delete</a></td>
-        </tr>
-        <%
-            }
-        %>
-    </table>
-</section>
+    <jsp:include page="fragments/header.jsp"/>
+    <section>
+        <table border=1px cellpadding="8" cellspacing="0">
+            <tr>
+                <th>Имя</th>
+                <th>Email</th>
+                <th colspan="2"></th>
+            </tr>
+            <c:forEach items="${resumes}" var="resume">
+                <jsp:useBean id="resume" type="com.webapp.model.Resume"/>
+                <tr>
+                    <td><a href="resume?uuid=${resume.uuid}">${resume.fullName}</a></td>
+                    <td><%=resume.getContact(ContactType.EMAIL)%></td>
+                    <td><a href="resume?uuid=${resume.uuid}&action=update">Update</a></td>
+                    <td><a href="resume?uuid=${resume.uuid}&action=delete">Delete</a></td>
+                </tr>
+            </c:forEach>
+        </table>
+    </section>
+    <jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>
