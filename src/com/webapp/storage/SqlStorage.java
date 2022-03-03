@@ -111,7 +111,7 @@ public class SqlStorage implements Storage {
     public void delete(String uuid) {
         sqlHelper.sqlExecute("DELETE FROM resume WHERE uuid = ?", ps -> {
             ps.setString(1, uuid);
-            if (!ps.execute()) {
+            if (ps.executeUpdate() == 0) {
                 throw new NotExistStorageException("Resume - " + uuid + " not exists!");
             }
             return null;

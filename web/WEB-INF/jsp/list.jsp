@@ -14,7 +14,7 @@
             <tr>
                 <th>Имя</th>
                 <th>Email</th>
-                <th colspan="2"></th>
+                <th colspan="2">Actions</th>
             </tr>
             <c:forEach items="${resumes}" var="resume">
                 <jsp:useBean id="resume" type="com.webapp.model.Resume"/>
