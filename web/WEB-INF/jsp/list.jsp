@@ -19,7 +19,7 @@
             <c:forEach items="${resumes}" var="resume">
                 <jsp:useBean id="resume" type="com.webapp.model.Resume"/>
                 <tr>
-                    <td><a href="resume?uuid=${resume.uuid}">${resume.fullName}</a></td>
+                    <td><a href="resume?uuid=${resume.uuid}&action=view">${resume.fullName}</a></td>
                     <td><%=resume.getContact(ContactType.EMAIL)%></td>
                     <td><a href="resume?uuid=${resume.uuid}&action=update">Update</a></td>
                     <td><a href="resume?uuid=${resume.uuid}&action=delete">Delete</a></td>
