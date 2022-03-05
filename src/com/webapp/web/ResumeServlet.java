@@ -31,6 +31,10 @@ public class ResumeServlet extends HttpServlet {
         }
 
         switch (action) {
+            case "view":
+                request.setAttribute("resume", storage.get(uuid));
+                request.getRequestDispatcher("/WEB-INF/jsp/view.jsp").forward(request, response);
+                return;
             case "delete":
                 storage.delete(uuid);
                 response.sendRedirect("resume");
