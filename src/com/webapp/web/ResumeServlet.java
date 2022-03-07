@@ -40,8 +40,9 @@ public class ResumeServlet extends HttpServlet {
                 response.sendRedirect("resume");
                 return;
             case "edit":
-                break;
             case "add":
+                request.setAttribute("resume", storage.get(uuid));
+                request.getRequestDispatcher("/WEB-INF/jsp/edit.jsp").forward(request, response);
         }
 
         /*
