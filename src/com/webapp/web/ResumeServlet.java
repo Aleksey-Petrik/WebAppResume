@@ -1,5 +1,7 @@
 package com.webapp.web;
 
+import com.webapp.model.ContactType;
+import com.webapp.model.Resume;
 import com.webapp.storage.Storage;
 import com.webapp.util.Config;
 
@@ -40,10 +42,12 @@ public class ResumeServlet extends HttpServlet {
                 response.sendRedirect("resume");
                 return;
             case "edit":
-            case "add":
                 request.setAttribute("resume", storage.get(uuid));
-                request.getRequestDispatcher("/WEB-INF/jsp/edit.jsp").forward(request, response);
+                break;
+            case "add":
+                request.setAttribute("resume", new Resume("", ""));
         }
+        request.getRequestDispatcher("/WEB-INF/jsp/edit.jsp").forward(request, response);
 
         /*
         request.setCharacterEncoding("UTF-8");
@@ -67,5 +71,28 @@ public class ResumeServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+
+        String uuid = request.getParameter("uuid");
+        String fullName = request.getParameter("full_name");
+
+        boolean isNewResume = uuid == null || uuid.isEmpty();
+
+        Resume resume = isNewResume ? new Resume(fullName) : storage.get(uuid);
+
+        for (ContactType type : ContactType.values()) {
+            String contact = request.getParameter(type.name());
+            if (contact != null || !contact.isEmpty()) {
+                resume.addContact(type, contact);
+            } else {
+                resume.getContacts().remove(type);
+            }
+        }
+
+        if (isNewResume) {
+            storage.save(resume);
+        } else {
+            storage.update(resume);
+        }
+        response.sendRedirect("resume");
     }
 }

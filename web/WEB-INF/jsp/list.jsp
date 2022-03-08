@@ -10,6 +10,7 @@
 <body>
     <jsp:include page="fragments/header.jsp"/>
     <section>
+        <a href="resume?action=add">Add</a>
         <table border=1px cellpadding="8" cellspacing="0">
             <tr>
                 <th>Имя</th>
