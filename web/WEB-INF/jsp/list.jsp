@@ -7,27 +7,27 @@
     <link rel="stylesheet" href="css/style.css">
     <title>Title</title>
 </head>
-<body>
-    <jsp:include page="fragments/header.jsp"/>
-    <section>
-        <a href="resume?action=add">Add</a>
-        <table border=1px cellpadding="8" cellspacing="0">
-            <tr>
-                <th>Имя</th>
-                <th>Email</th>
-                <th colspan="2">Actions</th>
-            </tr>
-            <c:forEach items="${resumes}" var="resume">
-                <jsp:useBean id="resume" type="com.webapp.model.Resume"/>
+    <body>
+        <jsp:include page="fragments/header.jsp"/>
+        <section>
+            <a href="resume?action=add">Add</a>
+            <table border=1px cellpadding="8" cellspacing="0">
                 <tr>
-                    <td><a href="resume?uuid=${resume.uuid}&action=view">${resume.fullName}</a></td>
-                    <td><%=resume.getContact(ContactType.EMAIL)%></td>
-                    <td><a href="resume?uuid=${resume.uuid}&action=edit">Update</a></td>
-                    <td><a href="resume?uuid=${resume.uuid}&action=delete">Delete</a></td>
+                    <th>Имя</th>
+                    <th>Email</th>
+                    <th colspan="2">Actions</th>
                 </tr>
-            </c:forEach>
-        </table>
-    </section>
-    <jsp:include page="fragments/footer.jsp"/>
-</body>
+                <c:forEach items="${resumes}" var="resume">
+                    <jsp:useBean id="resume" type="com.webapp.model.Resume"/>
+                    <tr>
+                        <td><a href="resume?uuid=${resume.uuid}&action=view">${resume.fullName}</a></td>
+                        <td><%=resume.getContact(ContactType.EMAIL)%></td>
+                        <td><a href="resume?uuid=${resume.uuid}&action=edit">Update</a></td>
+                        <td><a href="resume?uuid=${resume.uuid}&action=delete">Delete</a></td>
+                    </tr>
+                </c:forEach>
+            </table>
+        </section>
+        <jsp:include page="fragments/footer.jsp"/>
+    </body>
 </html>
