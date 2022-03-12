@@ -17,6 +17,12 @@
                 <%=contact.getKey().getTitle()%> <%=contact.getValue()%>
                 <br>
             </c:forEach>
+
+            <c:forEach var="section" items="${resume.sections}">
+                <jsp:useBean id="section" type="java.util.Map.Entry <com.webapp.model.SectionType, com.webapp.model.AbstractSection>"/>
+                <h3>${section.key.title}</h3>
+            </c:forEach>
+
         </section>
         <jsp:include page="fragments/footer.jsp"/>
     </body>
