@@ -14,13 +14,13 @@
             <form method="post" action="resume" enctype="application/x-www-form-urlencoded">
                 <input name="uuid" type="hidden" value="${resume.uuid}"/>
                 <dl>
-                    <dt>Full Name:</dt>
+                    <dt><b>Full Name:</b></dt>
                     <dd><input type="text" name="full_name" size="50" value="${resume.fullName}"/></dd>
                 </dl>
                 <h3>Contacts:</h3>
                 <c:forEach var="type" items="<%=ContactType.values()%>">
                     <dl>
-                        <dt>${type.title}</dt>
+                        <dt><b>${type.title}</b></dt>
                         <dd><input type="text" name="${type.name()}" value="${resume.getContact(type)}" size="30"/></dd>
                     </dl>
                 </c:forEach>
