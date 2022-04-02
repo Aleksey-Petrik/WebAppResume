@@ -25,9 +25,8 @@
 
             <c:forEach var="section" items="${resume.sections}">
                 <jsp:useBean id="section" type="java.util.Map.Entry <com.webapp.model.SectionType, com.webapp.model.AbstractSection>"/>
-                <h3>${section.key.title}</h3>
+                <%=HtmlUtil.htmlSections(section.getKey(), section.getValue())%>
             </c:forEach>
-
         </section>
         <jsp:include page="fragments/footer.jsp"/>
     </body>
