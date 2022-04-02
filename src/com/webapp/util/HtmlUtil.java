@@ -15,7 +15,7 @@ public class HtmlUtil {
         switch (type) {
             case PERSONAL:
             case OBJECTIVE:
-                html.append(String.format("<p>%s</p>", ((TextSection) section).getDescription()));
+                html.append(String.format("%s", ((TextSection) section).getDescription()));
                 break;
             case ACHIEVEMENT:
             case QUALIFICATIONS:
