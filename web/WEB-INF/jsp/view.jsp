@@ -22,7 +22,7 @@
                 <%--<%=contact.getKey().getTitle()%> <%=contact.getValue()%>--%>
                 <br>
             </c:forEach>
-
+            <hr>
             <c:forEach var="section" items="${resume.sections}">
                 <jsp:useBean id="section" type="java.util.Map.Entry <com.webapp.model.SectionType, com.webapp.model.AbstractSection>"/>
                 <%=HtmlUtil.htmlSections(section.getKey(), section.getValue())%>

@@ -1,4 +1,6 @@
 <%@ page import="com.webapp.model.ContactType" %>
+<%@ page import="com.webapp.model.SectionType" %>
+<%@ page import="com.webapp.util.HtmlUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -25,6 +27,21 @@
                     </dl>
                 </c:forEach>
                 <hr>
+                <h3>Sections:</h3>
+                <c:forEach var="type" items="<%=SectionType.values()%>">
+                    <c:set var="section" value="${resume.getSection(type)}"/>
+                    <jsp:useBean id="section" type="com.webapp.model.AbstractSection"/>
+                    <h4>${type.title}</h4>
+                    <c:choose>
+                        <c:when test="${type == 'OBJECTIVE'}">
+                            <input type="text" name="${type}" size=75 value="${section.blockDescriptions}">
+                        </c:when>
+                        <c:when test="${type == 'PERSONAL'}">
+                            <textarea name="${type}" cols=75 rows=5>${section.blockDescriptions}</textarea>
+                        </c:when>
+                    </c:choose>
+                </c:forEach>
+                <br>
                 <button type="submit">Save</button>
                 <button onclick="window.history.back()">Cancel</button>
             </form>
