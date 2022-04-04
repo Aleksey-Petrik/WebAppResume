@@ -39,6 +39,9 @@
                         <c:when test="${type == 'PERSONAL'}">
                             <textarea name="${type}" cols=75 rows=5>${section.blockDescriptions}</textarea>
                         </c:when>
+                        <c:when test="${type == 'QUALIFICATIONS' || type == 'ACHIEVEMENT'}">
+                            <textarea name="${type}" cols=75 rows=5>${section.blockDescriptions}</textarea>
+                        </c:when>
                     </c:choose>
                 </c:forEach>
                 <br>
