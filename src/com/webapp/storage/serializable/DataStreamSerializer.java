@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.Map;
 
 public class DataStreamSerializer implements SerializableStream {
-
     @Override
     public Resume doRead(InputStream is) throws IOException {
         try (DataInputStream dis = new DataInputStream(is)) {
